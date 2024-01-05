@@ -11,7 +11,12 @@ import "jquery"
 import "popper.js"
 import "bootstrap"
 
+
 import "../stylesheets/application" 
+
+import 'chart.js';
+
+document.addEventListener('turbolinks:load', () => {
 
 Rails.start()
 Turbolinks.start()
