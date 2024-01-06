@@ -6,16 +6,9 @@ class UsersController < ApplicationController
   @user = User.find(params[:id])
   @books = @user.books
   @book = Book.new
-
-  @posts = @user.posts  # @posts をユーザーの投稿として取得
-
-  respond_to do |format|
-    format.html
-    format.json { render json: { dates: @past_seven_days_counts.keys, counts: @past_seven_days_counts.values } }
-  end if @posts.any?
+  @posts = @user.posts
 
   if @posts.any?
-    # 投稿が存在する場合の処理
     @today_count = @posts.where(date: Date.today).sum(:count)
     @yesterday_count = @posts.where(date: Date.yesterday).sum(:count)
     @difference_percentage = calculate_difference_percentage(@yesterday_count, @today_count)
@@ -23,11 +16,28 @@ class UsersController < ApplicationController
     @last_week_count = @posts.where(date: (1.week.ago.beginning_of_week..1.week.ago.end_of_week)).sum(:count)
     @week_difference = @this_week_count - @last_week_count
     @past_seven_days_counts = @posts.where(date: (7.days.ago.beginning_of_day..Date.today.end_of_day)).group_by_day(:date).sum(:count)
+  elseif @posts.any?
+  # 投稿数を計算して各変数に設定する処理
   else
-    # 投稿が存在しない場合の処理
-    # 例えば、エラーメッセージをセットするなど
+  # 投稿がない場合のデフォルトの値を設定する
+  @today_count = 0
+  @yesterday_count = 0
+  @difference_percentage = 0
+  @this_week_count = 0
+  @last_week_count = 0
+  @week_difference = 0
+  @past_seven_days_counts = {}
+
+    # 投稿がない場合の処理
+    # デフォルトの値を設定したり、メッセージを表示したりします
   end
-end
+
+  respond_to do |format|
+    format.html
+    format.json { render json: { dates: @past_seven_days_counts&.keys, counts: @past_seven_days_counts&.values } }
+  end
+  end
+
 
   def index
     @users = User.all
