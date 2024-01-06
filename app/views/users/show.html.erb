@@ -8,31 +8,60 @@
     </div>
     <div class='col-md-8 offset-md-1'>
       <h2>Books</h2>
-      <%= render 'books/index',books: @books %>
-    </div>
-  </div>
-    <h1><%= @user.name %></h1>
-      <p>今日の投稿数: <%= @today_count %></p>
-      <p>昨日の投稿数: <%= @yesterday_count %></p>
-      <p>前日との差: <%= @difference_percentage %> %</p>
-      <p>今週の投稿数: <%= @this_week_count %></p>
-      <p>先週の投稿数: <%= @last_week_count %></p>
-      <p>今週と先週の差: <%= @week_difference %></p>
+      <%= render 'books/index', books: @books %>
+      <h1><%= @user.name %></h1>
+      <table class="table">
+        <tr>
+          <th colspan="3">今日の統計</th>
+        </tr>
+        <tr>
+          <td>今日の投稿数</td>
+          <td>昨日の投稿数</td>
+          <td>前日比</td>
+        </tr>
+        <tr>
+          <td><%= @today_count %></td>
+          <td><%= @yesterday_count %></td>
+          <td><%= @difference_percentage %> %</td>
+        </tr>
+        
+        <tr>
+          <th colspan="3">今週の統計</th>
+        </tr>
+        <tr>
+          <td>今週の投稿数</td>
+          <td>前週の投稿数</td>
+          <td>前週比</td>
+        </tr>
+        <tr>
+          <td><%= @this_week_count %></td>
+          <td><%= @last_week_count %></td>
+          <td><%= @week_difference %></td>
+        </tr>
+      </table>
       
       <!-- 過去7日間の投稿数一覧 -->
       <h2>過去7日間の投稿数</h2>
-      <ul>
-        <% if @past_seven_days_counts.present? %>
-          <h2>過去7日間の投稿数</h2>
-          <ul>
+      <% if @past_seven_days_counts.present? %>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Count</th>
+            </tr>
+          </thead>
+          <tbody>
             <% @past_seven_days_counts.each do |date, count| %>
-              <li><%= date %> : <%= count %></li>
+              <tr>
+                <td><%= date %></td>
+                <td><%= count %></td>
+              </tr>
             <% end %>
-          </ul>
-        <% else %>
-          <p>過去7日間の投稿はありません。</p>
-        <% end %>
-      </ul>
+          </tbody>
+        </table>
+      <% else %>
+        <p>過去7日間の投稿はありません。</p>
+      <% end %>
       
       <!-- chart.jsを使ったグラフの表示 -->
       <%= javascript_pack_tag 'chart' %>
@@ -41,4 +70,7 @@
       <script>
         // グラフの表示ロジックを書く（chart.jsの使い方に従って）
       </script>
+      
+    </div>
+  </div>
 </div>

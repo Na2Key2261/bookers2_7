@@ -1,14 +1,11 @@
-// app/javascript/packs/chart.js
-
-import Chart from 'chart.js';
-
+const ctx = document.getElementById('postChart').getContext('2d');
+const dates = <%== raw @past_seven_days_counts.keys.to_json %>;
+const counts = <%== raw @past_seven_days_counts.values.to_json %>;
+console.log('Dates:', dates);
+console.log('Counts:', counts);
 document.addEventListener('DOMContentLoaded', () => {
   // グラフの表示ロジックを記述
   // 例: 過去7日間のデータを使った折れ線グラフ
-  const ctx = document.getElementById('postChart').getContext('2d');
-  const dates = <%= raw @past_seven_days_counts.keys.to_json %>;
-  const counts = <%= raw @past_seven_days_counts.values.to_json %>;
-
   new Chart(ctx, {
     type: 'line',
     data: {
